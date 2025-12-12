@@ -9,13 +9,16 @@ A powerful terminal-based file viewer built with [Textual](https://textual.textu
 
 | Format | Extensions | Description |
 |--------|------------|-------------|
-| **CSV/TSV** | `.csv`, `.tsv` | Tabular view with row navigation and zebra striping |
+| **CSV/TSV** | `.csv`, `.tsv` | Tabular view with auto-delimiter detection |
 | **Excel** | `.xlsx`, `.xls`, `.xlsm` | Spreadsheet viewer with tabbed sheets |
 | **PDF** | `.pdf` | Text extraction with page-by-page tabs |
 | **Word** | `.docx` | Document text and table extraction |
 | **ZIP** | `.zip` | Archive listing with sizes and compression stats |
 | **Audio** | `.mp3`, `.wav`, `.flac`, `.ogg`, `.m4a` | Waveform visualization |
-| **Images** | `.jpg`, `.png`, `.gif`, `.bmp`, `.webp` | True color pixel rendering |
+| **Video** | `.mp4`, `.mkv`, `.avi`, `.mov`, `.webm` | Animated frame preview |
+| **Images** | `.jpg`, `.png`, `.bmp`, `.webp` | True color pixel rendering |
+| **GIF** | `.gif` | Animated GIF playback |
+| **SVG** | `.svg` | Vector graphics rendering |
 | **Text** | `*` | Fallback viewer with line numbers |
 
 ## Installation
@@ -42,9 +45,9 @@ cd quickview
 pip install -e .[all]
 ```
 
-### Optional: ffmpeg for Audio Support
+### Optional: ffmpeg for Audio/Video Support
 
-Audio waveform visualization requires ffmpeg:
+Audio waveform and video preview require ffmpeg:
 
 ```bash
 # macOS
@@ -91,8 +94,14 @@ qv backup.zip
 # View audio waveform
 qv song.mp3
 
+# Preview a video
+qv movie.mp4
+
 # View an image
 qv photo.jpg
+
+# View animated GIF
+qv animation.gif
 
 # View any text file
 qv config.yaml
@@ -153,7 +162,8 @@ to render images at 2x vertical resolution in the terminal.
 |---------|---------|-----------------|
 | Excel | openpyxl | `pip install quickview[excel]` |
 | PDF | pypdf | `pip install quickview[pdf]` |
-| Images | Pillow | `pip install quickview[image]` |
+| Images/GIF/Video | Pillow + ffmpeg | `pip install quickview[image]` |
+| SVG | cairosvg | `pip install quickview[svg]` |
 | Word | python-docx | `pip install quickview[docx]` |
 | Audio | pydub + ffmpeg | `pip install quickview[audio]` |
 
