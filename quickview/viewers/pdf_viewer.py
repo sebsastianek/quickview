@@ -2,6 +2,7 @@
 
 from textual import work
 from textual.app import ComposeResult
+from textual.containers import VerticalScroll
 from textual.widgets import Static, TabbedContent, TabPane
 
 from quickview.viewers.base import BaseViewer
@@ -85,15 +86,17 @@ class PDFViewer(BaseViewer):
             self.num_pages = len(reader.pages)
 
             if self.num_pages == 1:
-                yield PDFWidget(self.filepath, 0, 1, id="pdf-single")
+                with VerticalScroll():
+                    yield PDFWidget(self.filepath, 0, 1, id="pdf-single")
             else:
                 with TabbedContent():
                     for i in range(self.num_pages):
                         with TabPane(f"Page {i + 1}", id=f"pdf-page-{i}"):
-                            yield PDFWidget(
-                                self.filepath, i, self.num_pages,
-                                id=f"pdf-content-{i}", classes="pdf-page"
-                            )
+                            with VerticalScroll():
+                                yield PDFWidget(
+                                    self.filepath, i, self.num_pages,
+                                    id=f"pdf-content-{i}", classes="pdf-page"
+                                )
 
         except ImportError:
             yield Static("[red]Error: pypdf not installed. Run: pip install quickview[pdf][/red]")

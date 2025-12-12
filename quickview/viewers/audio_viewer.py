@@ -4,6 +4,7 @@ import array
 
 from textual import work
 from textual.app import ComposeResult
+from textual.containers import VerticalScroll
 from textual.widgets import Static
 
 from quickview.viewers.base import BaseViewer
@@ -160,7 +161,8 @@ class AudioViewer(BaseViewer):
     extensions = [".mp3", ".wav", ".flac", ".ogg", ".m4a", ".aac", ".wma"]
 
     def compose(self) -> ComposeResult:
-        yield AudioWidget(self.filepath, id="audio-content")
+        with VerticalScroll():
+            yield AudioWidget(self.filepath, id="audio-content")
 
     def load(self) -> None:
         # Loading is handled by AudioWidget.on_mount

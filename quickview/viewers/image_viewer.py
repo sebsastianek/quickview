@@ -2,6 +2,7 @@
 
 from textual import work
 from textual.app import ComposeResult
+from textual.containers import VerticalScroll
 from textual.widgets import Static
 
 from quickview.viewers.base import BaseViewer
@@ -86,7 +87,8 @@ class ImageViewer(BaseViewer):
     extensions = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"]
 
     def compose(self) -> ComposeResult:
-        yield ImageWidget(self.filepath, id="image-view")
+        with VerticalScroll():
+            yield ImageWidget(self.filepath, id="image-view")
 
     def load(self) -> None:
         # Loading is handled by ImageWidget.on_mount

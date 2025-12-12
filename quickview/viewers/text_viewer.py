@@ -1,6 +1,7 @@
 """Plain text file viewer (fallback)."""
 
 from textual.app import ComposeResult
+from textual.containers import VerticalScroll
 from textual.widgets import Static
 
 from quickview.viewers.base import BaseViewer
@@ -12,7 +13,8 @@ class TextViewer(BaseViewer):
     extensions = []  # Fallback, matches anything
 
     def compose(self) -> ComposeResult:
-        yield Static(id="text-content")
+        with VerticalScroll():
+            yield Static(id="text-content")
 
     def load(self) -> None:
         content = self.app.query_one("#text-content", Static)

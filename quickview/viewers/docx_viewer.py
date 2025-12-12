@@ -2,6 +2,7 @@
 
 from textual import work
 from textual.app import ComposeResult
+from textual.containers import VerticalScroll
 from textual.widgets import Static
 
 from quickview.viewers.base import BaseViewer
@@ -68,7 +69,8 @@ class DocxViewer(BaseViewer):
     extensions = [".docx"]
 
     def compose(self) -> ComposeResult:
-        yield DocxWidget(self.filepath, id="docx-content")
+        with VerticalScroll():
+            yield DocxWidget(self.filepath, id="docx-content")
 
     def load(self) -> None:
         # Loading is handled by DocxWidget.on_mount

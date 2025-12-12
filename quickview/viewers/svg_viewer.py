@@ -4,6 +4,7 @@ import io
 
 from textual import work
 from textual.app import ComposeResult
+from textual.containers import VerticalScroll
 from textual.widgets import Static
 
 from quickview.viewers.base import BaseViewer
@@ -108,7 +109,8 @@ class SVGViewer(BaseViewer):
     extensions = [".svg"]
 
     def compose(self) -> ComposeResult:
-        yield SVGWidget(self.filepath, id="svg-view")
+        with VerticalScroll():
+            yield SVGWidget(self.filepath, id="svg-view")
 
     def load(self) -> None:
         # Loading is handled by SVGWidget.on_mount
