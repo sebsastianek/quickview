@@ -22,7 +22,7 @@ class ImageWidget(Static):
         try:
             from PIL import Image
         except ImportError:
-            self.call_from_thread(
+            self.app.call_from_thread(
                 self.update,
                 "[red]Error: Pillow not installed. Run: pip install quickview[image][/red]",
             )
@@ -74,10 +74,10 @@ class ImageWidget(Static):
 
                 lines.append(line)
 
-            self.call_from_thread(self.update, "\n".join(lines))
+            self.app.call_from_thread(self.update, "\n".join(lines))
 
         except Exception as e:
-            self.call_from_thread(self.update, f"[red]Error loading image: {e}[/red]")
+            self.app.call_from_thread(self.update, f"[red]Error loading image: {e}[/red]")
 
 
 class ImageViewer(BaseViewer):
