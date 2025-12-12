@@ -9,6 +9,7 @@ from quickview.viewers.svg_viewer import SVGViewer
 from quickview.viewers.zip_viewer import ZipViewer
 from quickview.viewers.docx_viewer import DocxViewer
 from quickview.viewers.audio_viewer import AudioViewer
+from quickview.viewers.video_viewer import VideoViewer
 from quickview.viewers.text_viewer import TextViewer
 
 __all__ = [
@@ -21,5 +22,6 @@ __all__ = [
     "ZipViewer",
     "DocxViewer",
     "AudioViewer",
+    "VideoViewer",
     "TextViewer",
 ]

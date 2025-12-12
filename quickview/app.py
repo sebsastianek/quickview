@@ -15,6 +15,7 @@ from quickview.viewers import (
     PDFViewer,
     SVGViewer,
     TextViewer,
+    VideoViewer,
     ZipViewer,
 )
 from quickview.viewers.base import BaseViewer
@@ -27,6 +28,7 @@ VIEWERS: list[type[BaseViewer]] = [
     ZipViewer,
     DocxViewer,
     AudioViewer,
+    VideoViewer,
     SVGViewer,
     ImageViewer,
     TextViewer,  # Fallback, must be last
