@@ -15,7 +15,7 @@ A powerful terminal-based file viewer built with [Textual](https://textual.textu
 | **Word** | `.docx` | Document text and table extraction |
 | **ZIP** | `.zip` | Archive listing with sizes and compression stats |
 | **Audio** | `.mp3`, `.wav`, `.flac`, `.ogg`, `.m4a` | Waveform visualization |
-| **Images** | `.jpg`, `.png`, `.gif`, `.bmp`, `.webp` | ASCII art conversion |
+| **Images** | `.jpg`, `.png`, `.gif`, `.bmp`, `.webp` | True color pixel rendering |
 | **Text** | `*` | Fallback viewer with line numbers |
 
 ## Installation
@@ -91,7 +91,7 @@ qv backup.zip
 # View audio waveform
 qv song.mp3
 
-# View an image as ASCII art
+# View an image
 qv photo.jpg
 
 # View any text file
@@ -141,14 +141,10 @@ Waveform:
 0:00                                    END
 ```
 
-### Image ASCII Art
+### Image View
 ```
-                    .:-=+*##%@@%#*+=-:.
-                .:=*%@@@@@@@@@@@@@@@@@%*=:.
-             .-+#@@@@@@@@@@@@@@@@@@@@@@@@#+-.
-           :=#@@@@@@@@%#*+==++*#%@@@@@@@@@@#=:
-         .=@@@@@@#+-:..        ..:=+#@@@@@@@=.
-        :#@@@@@+:.                  .:+@@@@@#:
+Uses half-block characters (▀) with true RGB colors
+to render images at 2x vertical resolution in the terminal.
 ```
 
 ## Optional Dependencies
