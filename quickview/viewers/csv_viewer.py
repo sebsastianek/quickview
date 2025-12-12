@@ -15,11 +15,22 @@ class CSVViewer(BaseViewer):
 
     def __init__(self, filepath: str, app, delimiter: str | None = None):
         super().__init__(filepath, app)
-        # Auto-detect delimiter from extension if not provided
-        if delimiter is None:
-            self.delimiter = "\t" if filepath.lower().endswith(".tsv") else ","
-        else:
-            self.delimiter = delimiter
+        self._explicit_delimiter = delimiter
+
+    def _detect_delimiter(self, sample: str) -> str:
+        """Auto-detect CSV delimiter using csv.Sniffer or fallback heuristics."""
+        # Try csv.Sniffer first
+        try:
+            dialect = csv.Sniffer().sniff(sample, delimiters=',;\t|')
+            return dialect.delimiter
+        except csv.Error:
+            pass
+
+        # Fallback: count common delimiters and pick most frequent
+        delimiters = [';', ',', '\t', '|']
+        counts = {d: sample.count(d) for d in delimiters}
+        best = max(counts, key=counts.get)
+        return best if counts[best] > 0 else ','
 
     def compose(self) -> ComposeResult:
         yield DataTable(id="csv-table")
@@ -31,8 +42,20 @@ class CSVViewer(BaseViewer):
 
         try:
             with open(self.filepath, "r", newline="", encoding="utf-8", errors="replace") as f:
-                reader = csv.reader(f, delimiter=self.delimiter)
-                rows = list(reader)
+                content = f.read()
+
+            # Determine delimiter
+            if self._explicit_delimiter:
+                delimiter = self._explicit_delimiter
+            elif self.filepath.lower().endswith(".tsv"):
+                delimiter = "\t"
+            else:
+                # Auto-detect from first few KB
+                sample = content[:8192]
+                delimiter = self._detect_delimiter(sample)
+
+            reader = csv.reader(content.splitlines(), delimiter=delimiter)
+            rows = list(reader)
 
             if rows:
                 headers = rows[0]
