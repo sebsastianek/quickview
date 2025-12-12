@@ -55,6 +55,13 @@ class QuickViewApp(App):
 
     DataTable {
         height: 1fr;
+        scrollbar-gutter: stable;
+    }
+
+    VerticalScroll {
+        height: 1fr;
+        scrollbar-gutter: stable;
+        scrollbar-size: 1 1;
     }
 
     .info-bar {
@@ -65,46 +72,16 @@ class QuickViewApp(App):
         padding: 0 1;
     }
 
-    #image-view {
-        height: 1fr;
-        overflow: auto scroll;
-    }
-
-    #text-content {
-        height: 1fr;
-        overflow: auto scroll;
-    }
-
     TabbedContent {
         height: 1fr;
     }
 
-    PDFContentWidget {
-        height: 1fr;
-        overflow: auto scroll;
-        padding: 1;
-    }
-
-    .pdf-page {
-        height: 1fr;
-        overflow: auto scroll;
-    }
-
     #docx-content {
-        height: 1fr;
-        overflow: auto scroll;
         padding: 1 2;
     }
 
     #audio-content {
-        height: 1fr;
-        overflow: auto scroll;
         padding: 1 2;
-    }
-
-    #svg-view {
-        height: 1fr;
-        overflow: auto scroll;
     }
     """
 
