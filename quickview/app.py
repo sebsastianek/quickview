@@ -13,6 +13,7 @@ from quickview.viewers import (
     ExcelViewer,
     ImageViewer,
     PDFViewer,
+    SVGViewer,
     TextViewer,
     ZipViewer,
 )
@@ -26,6 +27,7 @@ VIEWERS: list[type[BaseViewer]] = [
     ZipViewer,
     DocxViewer,
     AudioViewer,
+    SVGViewer,
     ImageViewer,
     TextViewer,  # Fallback, must be last
 ]
@@ -98,6 +100,11 @@ class QuickViewApp(App):
         height: 1fr;
         overflow: auto scroll;
         padding: 1 2;
+    }
+
+    #svg-view {
+        height: 1fr;
+        overflow: auto scroll;
     }
     """
 

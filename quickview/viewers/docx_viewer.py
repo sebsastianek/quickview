@@ -8,24 +8,23 @@ from quickview.viewers.base import BaseViewer
 from quickview.utils import escape_markup
 
 
-class DocxViewer(BaseViewer):
-    """Viewer for Word documents."""
+class DocxWidget(Static):
+    """Widget to display Word document content."""
 
-    extensions = [".docx"]
+    def __init__(self, filepath: str, **kwargs):
+        super().__init__(**kwargs)
+        self.filepath = filepath
 
-    def compose(self) -> ComposeResult:
-        yield Static(id="docx-content")
-
-    def load(self) -> None:
-        self._load_async()
+    def on_mount(self) -> None:
+        self._load_docx()
 
     @work(thread=True)
-    def _load_async(self) -> None:
+    def _load_docx(self) -> None:
         try:
             from docx import Document
         except ImportError:
             self.app.call_from_thread(
-                self._update_content,
+                self.update,
                 "[red]Error: python-docx not installed. Run: pip install quickview[docx][/red]",
             )
             return
@@ -54,17 +53,23 @@ class DocxViewer(BaseViewer):
                 lines.append("")
 
             content = "\n".join(lines) if lines else "[dim]<Empty document>[/dim]"
-            self.app.call_from_thread(self._update_content, content)
+            self.app.call_from_thread(self.update, content)
 
         except Exception as e:
             self.app.call_from_thread(
-                self._update_content,
+                self.update,
                 f"[red]Error loading Word document: {e}[/red]",
             )
 
-    def _update_content(self, content: str) -> None:
-        try:
-            widget = self.app.query_one("#docx-content", Static)
-            widget.update(content)
-        except Exception:
-            pass
+
+class DocxViewer(BaseViewer):
+    """Viewer for Word documents."""
+
+    extensions = [".docx"]
+
+    def compose(self) -> ComposeResult:
+        yield DocxWidget(self.filepath, id="docx-content")
+
+    def load(self) -> None:
+        # Loading is handled by DocxWidget.on_mount
+        pass

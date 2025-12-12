@@ -5,6 +5,7 @@ from quickview.viewers.csv_viewer import CSVViewer
 from quickview.viewers.excel_viewer import ExcelViewer
 from quickview.viewers.pdf_viewer import PDFViewer
 from quickview.viewers.image_viewer import ImageViewer
+from quickview.viewers.svg_viewer import SVGViewer
 from quickview.viewers.zip_viewer import ZipViewer
 from quickview.viewers.docx_viewer import DocxViewer
 from quickview.viewers.audio_viewer import AudioViewer
@@ -16,6 +17,7 @@ __all__ = [
     "ExcelViewer",
     "PDFViewer",
     "ImageViewer",
+    "SVGViewer",
     "ZipViewer",
     "DocxViewer",
     "AudioViewer",
