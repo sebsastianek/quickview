@@ -1,4 +1,4 @@
-"""Image file viewer (ASCII art conversion)."""
+"""Image file viewer (true color pixel rendering)."""
 
 from textual import work
 from textual.app import ComposeResult
@@ -8,9 +8,7 @@ from quickview.viewers.base import BaseViewer
 
 
 class ImageWidget(Static):
-    """Widget to display images as ASCII art."""
-
-    ASCII_CHARS = " .:-=+*#%@"
+    """Widget to display images using true color block characters."""
 
     def __init__(self, filepath: str, **kwargs):
         super().__init__(**kwargs)
@@ -32,26 +30,48 @@ class ImageWidget(Static):
 
         try:
             img = Image.open(self.filepath)
+            orig_width, orig_height = img.size
 
-            target_width = 120
+            # Calculate target size based on terminal
+            # Using half-block chars (▀) we get 2 vertical pixels per character
+            target_width = 100
             aspect_ratio = img.height / img.width
-            new_height = int(target_width * aspect_ratio * 0.5)
+            # Double height because we use half-blocks for 2 rows per line
+            target_height = int(target_width * aspect_ratio)
+            # Make height even for half-block rendering
+            target_height = target_height + (target_height % 2)
 
-            img = img.resize((target_width, new_height))
-            img = img.convert("L")
+            img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+            img = img.convert("RGB")
 
             pixels = list(img.getdata())
             lines = []
 
-            for i in range(0, len(pixels), target_width):
-                row_pixels = pixels[i : i + target_width]
+            # Header with image info
+            lines.append(f"[bold cyan]Image: {orig_width}x{orig_height} → {target_width}x{target_height}[/bold cyan]")
+            lines.append("")
+
+            # Render using half-block characters (▀)
+            # Each character represents 2 vertical pixels:
+            # - Foreground color = top pixel
+            # - Background color = bottom pixel
+            for y in range(0, target_height, 2):
                 line = ""
-                for pixel in row_pixels:
-                    char_index = min(
-                        int(pixel / 256 * len(self.ASCII_CHARS)),
-                        len(self.ASCII_CHARS) - 1,
-                    )
-                    line += self.ASCII_CHARS[char_index]
+                for x in range(target_width):
+                    # Top pixel (foreground)
+                    top_idx = y * target_width + x
+                    top_r, top_g, top_b = pixels[top_idx]
+
+                    # Bottom pixel (background)
+                    bottom_idx = (y + 1) * target_width + x
+                    if bottom_idx < len(pixels):
+                        bot_r, bot_g, bot_b = pixels[bottom_idx]
+                    else:
+                        bot_r, bot_g, bot_b = top_r, top_g, top_b
+
+                    # Use upper half block with fg=top, bg=bottom
+                    line += f"[rgb({top_r},{top_g},{top_b}) on rgb({bot_r},{bot_g},{bot_b})]▀[/]"
+
                 lines.append(line)
 
             self.call_from_thread(self.update, "\n".join(lines))
